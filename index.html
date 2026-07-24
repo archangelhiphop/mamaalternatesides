@@ -1,79 +1,69 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Untitled Document</title>
+<meta name="authoring-tool" content="Adobe_Animate_CC">
+<title>mamaportrait</title>
+<style>
+#animation_container, #_preload_div_ {
+position: absolute;
+margin: auto;
+left: 0; right: 0;
+top: 0; bottom: 0;
+}
+</style>
+<script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+<script src="mamaportrait5.js"></script>
+<script>
+var canvas, stage, exportRoot, anim_container, dom_overlay_container, fnStartAnimation;
+function init() {
+canvas = document.getElementById("canvas");
+anim_container = document.getElementById("animation_container");
+dom_overlay_container = document.getElementById("dom_overlay_container");
+var comp = AdobeAn.getComposition("060A16C0A3BB4DD6B433BF9BB0BEF053");
+var lib = comp.getLibrary();
+var loader = new createjs.LoadQueue(false);
+loader.addEventListener("fileload", function(evt){ handleFileLoad(evt, comp); });
+loader.addEventListener("complete", function(evt){ handleComplete(evt, comp); });
+loader.loadManifest(lib.properties.manifest);
+}
+function handleFileLoad(evt, comp) {
+var images = comp.getImages();
+if (evt && (evt.item.type == "image")) { images[evt.item.id] = evt.result; }
+}
+function handleComplete(evt, comp) {
+var lib = comp.getLibrary();
+var ss = comp.getSpriteSheet();
+var queue = evt.target;
+var ssMetadata = lib.ssMetadata;
+for (var i = 0; i < ssMetadata.length; i++) {
+ss[ssMetadata[i].name] = new createjs.SpriteSheet({"images": [queue.getResult(ssMetadata[i].name)], "frames": ssMetadata[i].frames});
+}
+var preloaderDiv = document.getElementById("_preload_div_");
+preloaderDiv.style.display = 'none';
+canvas.style.display = 'block';
+exportRoot = new lib.momface();
+stage = new lib.Stage(canvas);
+stage.enableMouseOver();
+fnStartAnimation = function() {
+stage.addChild(exportRoot);
+createjs.Ticker.framerate = lib.properties.fps;
+createjs.Ticker.addEventListener("tick", stage);
+}
+AdobeAn.makeResponsive(false, 'both', false, 1, [canvas, preloaderDiv, anim_container, dom_overlay_container]);
+AdobeAn.compositionLoaded(lib.properties.id);
+fnStartAnimation();
+}
+</script>
 </head>
-
-<body>
-&lt;!DOCTYPE html&gt;<br>
-&lt;html&gt;<br>
-&lt;head&gt;<br>
-&lt;meta charset=&quot;UTF-8&quot;&gt;<br>
-&lt;meta name=&quot;authoring-tool&quot; content=&quot;Adobe_Animate_CC&quot;&gt;<br>
-&lt;title&gt;mamaportrait&lt;/title&gt;<br>
-&lt;style&gt;<br>
-#animation_container, #_preload_div_ {<br>
-position: absolute;<br>
-margin: auto;<br>
-left: 0; right: 0;<br>
-top: 0; bottom: 0;<br>
-}<br>
-&lt;/style&gt;<br>
-&lt;script src=&quot;https://code.createjs.com/1.0.0/createjs.min.js&quot;&gt;&lt;/script&gt;<br>
-&lt;script src="mamaportrait5.js"></script><br>
-&lt;script&gt;<br>
-var canvas, stage, exportRoot, anim_container, dom_overlay_container, fnStartAnimation;<br>
-function init() {<br>
-canvas = document.getElementById(&quot;canvas&quot;);<br>
-anim_container = document.getElementById(&quot;animation_container&quot;);<br>
-dom_overlay_container = document.getElementById(&quot;dom_overlay_container&quot;);<br>
-var comp = AdobeAn.getComposition(&quot;060A16C0A3BB4DD6B433BF9BB0BEF053&quot;);<br>
-var lib = comp.getLibrary();<br>
-var loader = new createjs.LoadQueue(false);<br>
-loader.addEventListener(&quot;fileload&quot;, function(evt){ handleFileLoad(evt, comp); });<br>
-loader.addEventListener(&quot;complete&quot;, function(evt){ handleComplete(evt, comp); });<br>
-loader.loadManifest(lib.properties.manifest);<br>
-}<br>
-function handleFileLoad(evt, comp) {<br>
-var images = comp.getImages(); <br>
-if (evt &amp;&amp; (evt.item.type == &quot;image&quot;)) { images[evt.item.id] = evt.result; } <br>
-}<br>
-function handleComplete(evt, comp) {<br>
-var lib = comp.getLibrary();<br>
-var ss = comp.getSpriteSheet();<br>
-var queue = evt.target;<br>
-var ssMetadata = lib.ssMetadata;<br>
-for (var i = 0; i &lt; ssMetadata.length; i++) {<br>
-ss[ssMetadata[i].name] = new createjs.SpriteSheet({&quot;images&quot;: [queue.getResult(ssMetadata[i].name)], &quot;frames&quot;: ssMetadata[i].frames});<br>
-}<br>
-var preloaderDiv = document.getElementById(&quot;_preload_div_&quot;);<br>
-preloaderDiv.style.display = 'none';<br>
-canvas.style.display = 'block';<br>
-exportRoot = new lib.momface();<br>
-stage = new lib.Stage(canvas);<br>
-stage.enableMouseOver(); <br>
-fnStartAnimation = function() {<br>
-stage.addChild(exportRoot);<br>
-createjs.Ticker.framerate = lib.properties.fps;<br>
-createjs.Ticker.addEventListener(&quot;tick&quot;, stage);<br>
-}<br>
-AdobeAn.makeResponsive(false, 'both', false, 1, [canvas, preloaderDiv, anim_container, dom_overlay_container]); <br>
-AdobeAn.compositionLoaded(lib.properties.id);<br>
-fnStartAnimation();<br>
-}<br>
-&lt;/script&gt;<br>
-&lt;/head&gt;<br>
-&lt;body onload=&quot;init();&quot; style=&quot;margin:0px;&quot;&gt;<br>
-&lt;div id=&quot;animation_container&quot; style=&quot;background-color:rgba(51, 51, 51, 1.00); width:640px; height:500px&quot;&gt;<br>
-&lt;canvas id=&quot;canvas&quot; width=&quot;640&quot; height=&quot;500&quot; style=&quot;position: absolute; display: none; background-color:rgba(51, 51, 51, 1.00);&quot;&gt;&lt;/canvas&gt;<br>
-&lt;div id=&quot;dom_overlay_container&quot; style=&quot;pointer-events:none; overflow:hidden; width:640px; height:500px; position: absolute; left: 0px; top: 0px; display: none;&quot;&gt;&lt;/div&gt;<br>
-&lt;/div&gt;<br>
-&lt;div id='_preload_div_' style='position:absolute; top:0; left:0; display: inline-block; height:500px; width: 640px; text-align: center;'&gt;<br>
-&lt;span style='display: inline-block; height: 100%; vertical-align: middle;'&gt;&lt;/span&gt;<br>
-&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;id=1kyTZpyUGpLGDc6jaFEkC8zHbZzppbFz7&quot; style='vertical-align: middle; max-height: 100%'/&gt;<br>
-&lt;/div&gt;<br>
-&lt;/body&gt;<br>
-&lt;/html&gt;
+<body onload="init();" style="margin:0px;">
+<div id="animation_container" style="background-color:rgba(51, 51, 51, 1.00); width:640px; height:500px">
+<canvas id="canvas" width="640" height="500" style="position: absolute; display: none; background-color:rgba(51, 51, 51, 1.00);"></canvas>
+<div id="dom_overlay_container" style="pointer-events:none; overflow:hidden; width:640px; height:500px; position: absolute; left: 0px; top: 0px; display: none;"></div>
+</div>
+<div id='_preload_div_' style='position:absolute; top:0; left:0; display: inline-block; height:500px; width: 640px; text-align: center;'>
+<span style='display: inline-block; height: 100%; vertical-align: middle;'></span>
+<img src="_preloader.gif" style='vertical-align: middle; max-height: 100%'/>
+</div>
 </body>
 </html>
