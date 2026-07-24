@@ -430,71 +430,69 @@ if (reversed == null) { loop = false; }
             this.isSingleFrame = true;
         }
         var _this = this;
-        
-        // Function to enable dragging
-        function enableDrag(target) {
+
+        // Combined drag + double-tap/double-click rotation handler.
+        // Uses pressup + movement distance to detect a "tap" (works reliably
+        // on both mouse and touch, unlike the native dblclick/click events).
+        function enableDragAndDoubleTap(target) {
+            var lastTapTime = 0;
+            var startX = 0, startY = 0;
+            var moved = false;
+            var TAP_MOVE_THRESHOLD = 6; // pixels
+            var DOUBLE_TAP_WINDOW = 350; // ms
+
             target.on('mousedown', function(evt) {
                 var offsetX = target.x - evt.stageX;
                 var offsetY = target.y - evt.stageY;
-        
+                startX = evt.stageX;
+                startY = evt.stageY;
+                moved = false;
+
                 target.on('pressmove', function(evt) {
+                    var dx = evt.stageX - startX;
+                    var dy = evt.stageY - startY;
+                    if (Math.abs(dx) > TAP_MOVE_THRESHOLD || Math.abs(dy) > TAP_MOVE_THRESHOLD) {
+                        moved = true;
+                    }
                     target.x = evt.stageX + offsetX;
                     target.y = evt.stageY + offsetY;
                     _this.stage.update();
                 });
-        
+
                 target.on('pressup', function(evt) {
                     target.off('pressmove');
                     _this.stage.update();
+
+                    if (!moved) {
+                        var currentTime = new Date().getTime();
+                        var tapLength = currentTime - lastTapTime;
+                        if (tapLength < DOUBLE_TAP_WINDOW && tapLength > 0) {
+                            target.rotation += 90;
+                            _this.stage.update();
+                            lastTapTime = 0;
+                        } else {
+                            lastTapTime = currentTime;
+                        }
+                    }
                 });
             });
         }
 
-        // Function to enable rotation on double-click (desktop) and double-tap (mobile)
-        function enableDoubleTap(target) {
-            var lastTapTime = 0;
-            target.on('click', function(evt) {
-                var currentTime = new Date().getTime();
-                var tapLength = currentTime - lastTapTime;
-                if (tapLength < 300 && tapLength > 0) {
-                    target.rotation += 90;
-                    _this.stage.update();
-                }
-                lastTapTime = currentTime;
-            });
-        }
-        
-        // Apply drag to all pieces
-        enableDrag(_this.hairdark);
-        enableDrag(_this.bluesq);
-        enableDrag(_this.eyer);
-        enableDrag(_this.eyel);
-        enableDrag(_this.nose);
-        enableDrag(_this.chin);
-        enableDrag(_this.hairlight);
-        enableDrag(_this.goldlong);
-        enableDrag(_this.goldmed);
-        enableDrag(_this.goldsm);
-        enableDrag(_this.skin1);
-        enableDrag(_this.skin2);
-        enableDrag(_this.hand);
-        enableDrag(_this.mouth);
-
-        // Apply double-tap/double-click rotation to all pieces
-        enableDoubleTap(_this.eyel);
-        enableDoubleTap(_this.eyer);
-        enableDoubleTap(_this.mouth);
-        enableDoubleTap(_this.nose);
-        enableDoubleTap(_this.skin1);
-        enableDoubleTap(_this.skin2);
-        enableDoubleTap(_this.chin);
-        enableDoubleTap(_this.bluesq);
-        enableDoubleTap(_this.hairlight);
-        enableDoubleTap(_this.goldlong);
-        enableDoubleTap(_this.goldmed);
-        enableDoubleTap(_this.goldsm);
-        enableDoubleTap(_this.hand);
-        enableDoubleTap(_this.hairdark);
+        // Apply to all pieces
+        enableDragAndDoubleTap(_this.hairdark);
+        enableDragAndDoubleTap(_this.bluesq);
+        enableDragAndDoubleTap(_this.eyer);
+        enableDragAndDoubleTap(_this.eyel);
+        enableDragAndDoubleTap(_this.nose);
+        enableDragAndDoubleTap(_this.chin);
+        enableDragAndDoubleTap(_this.hairlight);
+        enableDragAndDoubleTap(_this.goldlong);
+        enableDragAndDoubleTap(_this.goldmed);
+        enableDragAndDoubleTap(_this.goldsm);
+        enableDragAndDoubleTap(_this.skin1);
+        enableDragAndDoubleTap(_this.skin2);
+        enableDragAndDoubleTap(_this.hand);
+        enableDragAndDoubleTap(_this.mouth);
     }
 
     // actions tween:
