@@ -434,26 +434,37 @@ if (reversed == null) { loop = false; }
         // Function to enable dragging
         function enableDrag(target) {
             target.on('mousedown', function(evt) {
-                // Store the offset between the mouse position and the target position
                 var offsetX = target.x - evt.stageX;
                 var offsetY = target.y - evt.stageY;
         
-                // Add the pressmove event listener to update the position during dragging
                 target.on('pressmove', function(evt) {
                     target.x = evt.stageX + offsetX;
                     target.y = evt.stageY + offsetY;
-                    _this.stage.update(); // Update the stage to reflect changes
+                    _this.stage.update();
                 });
         
-                // Add the pressup event listener to stop dragging when the mouse is released
                 target.on('pressup', function(evt) {
-                    target.off('pressmove'); // Remove the pressmove event listener
-                    _this.stage.update(); // Update the stage to reflect changes
+                    target.off('pressmove');
+                    _this.stage.update();
                 });
             });
         }
+
+        // Function to enable rotation on double-click (desktop) and double-tap (mobile)
+        function enableDoubleTap(target) {
+            var lastTapTime = 0;
+            target.on('click', function(evt) {
+                var currentTime = new Date().getTime();
+                var tapLength = currentTime - lastTapTime;
+                if (tapLength < 300 && tapLength > 0) {
+                    target.rotation += 90;
+                    _this.stage.update();
+                }
+                lastTapTime = currentTime;
+            });
+        }
         
-        // Apply the function to your button (replace 'hairdark' with your instance name)
+        // Apply drag to all pieces
         enableDrag(_this.hairdark);
         enableDrag(_this.bluesq);
         enableDrag(_this.eyer);
@@ -468,90 +479,22 @@ if (reversed == null) { loop = false; }
         enableDrag(_this.skin2);
         enableDrag(_this.hand);
         enableDrag(_this.mouth);
-        
-        var _this = this;
-        /*
-        Double click on the specified symbol instance executes a function.
-        */
-        _this.eyel.on('dblclick', function(){
-        /*
-        Rotates the symbol inst,ance by updating its rotation property by the specified number of degrees.
-        To rotate the symbol instance counter clock-wise input a negative number.
-        */
-        _this.eyel.rotation+=90;
-        });
-        
-        var _this = this;
-        /*
-        Double click on the specified symbol instance executes a function.
-        */
-        _this.eyer.on('dblclick', function(){
-        /*
-        Rotates the symbol inst,ance by updating its rotation property by the specified number of degrees.
-        To rotate the symbol instance counter clock-wise input a negative number.
-        */
-        _this.eyer.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.mouth.on('dblclick', function(){
-        _this.mouth.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.nose.on('dblclick', function(){
-        _this.nose.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.skin1.on('dblclick', function(){
-        _this.skin1.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.skin2.on('dblclick', function(){
-        _this.skin2.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.chin.on('dblclick', function(){
-        _this.chin.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.bluesq.on('dblclick', function(){
-        _this.bluesq.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.hairlight.on('dblclick', function(){
-        _this.hairlight.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.goldlong.on('dblclick', function(){
-        _this.goldlong.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.goldmed.on('dblclick', function(){
-        _this.goldmed.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.goldsm.on('dblclick', function(){
-        _this.goldsm.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.hand.on('dblclick', function(){
-        _this.hand.rotation+=90;
-        });
-        
-        var _this = this;
-        _this.hairdark.on('dblclick', function(){
-        _this.hairdark.rotation+=90;
-        });
+
+        // Apply double-tap/double-click rotation to all pieces
+        enableDoubleTap(_this.eyel);
+        enableDoubleTap(_this.eyer);
+        enableDoubleTap(_this.mouth);
+        enableDoubleTap(_this.nose);
+        enableDoubleTap(_this.skin1);
+        enableDoubleTap(_this.skin2);
+        enableDoubleTap(_this.chin);
+        enableDoubleTap(_this.bluesq);
+        enableDoubleTap(_this.hairlight);
+        enableDoubleTap(_this.goldlong);
+        enableDoubleTap(_this.goldmed);
+        enableDoubleTap(_this.goldsm);
+        enableDoubleTap(_this.hand);
+        enableDoubleTap(_this.hairdark);
     }
 
     // actions tween:
